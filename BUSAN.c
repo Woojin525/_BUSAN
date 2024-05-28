@@ -28,6 +28,7 @@
 #define ACTION_PULL 2
 
 int main() {
+    srand((unsigned int)time(NULL));
     //인트로
     printf("□□■■□□□□□■■□□□□■■□□□□■□□□□□■■□□□□■□□■□□\n");
     printf("□□■■□□□□□■■□□□□■■□□□□■□□□■■■■■■□□■□□■□□\n");
@@ -93,14 +94,11 @@ int main() {
         printf("#");
     printf("\n---------------\n\n\n");
 
-    if (LEN < LEN_MIN || LEN > LEN_MAX || PROB < PROB_MIN || PROB > PROB_MAX) {
+    if (LEN < LEN_MIN || LEN > LEN_MAX || PROB < PROB_MIN || PROB > PROB_MAX)
         return 0;
-    }
 
     while (1) {
-
-        srand((unsigned int)time(NULL));
-
+        //난수
         for (int i = 0; i < 30; i++)
             int temp = rand();
 
@@ -139,7 +137,7 @@ int main() {
         printf("#\n");
         for (int i = 0; i < LEN; i++)
             printf("#");
-        prinf("\n\n");
+        printf("\n\n");
 
         //C상태
         if (PROB < r1)
@@ -158,9 +156,25 @@ int main() {
             printf(" (cannot move)\n");
         else
             printf("\n");
-        printf("\n");
-        printf("---------------\n");
-        printf("\n");
+        printf("\n---------------\n\n");
+
+        //M입력
+        while (1) {
+            printf("madongseok move(0:stay, 1:left)>> ");
+            scanf_s("%d", &MDS);
+            if (MDS == MOVE_STAY || MDS == MOVE_LEFT && M - 1 != Z)
+                break;
+            else
+                printf("제자리 대기만 가능합니다.\n");
+        }
+        if (MDS == MOVE_LEFT) {
+            M--;
+            if (Maggro != AGGRO_MAX)
+                Maggro++;
+        }
+        if (MDS == MOVE_STAY)
+            if (Maggro != AGGRO_MIN)
+                Maggro--;
 
         //Citizen won
         if (C == 1) {
@@ -215,9 +229,6 @@ int main() {
 
             break;
         }
-
-
-        Sleep(4000);
     }
     printf("게임이 종료되었습니다.\n");
     return 0;
