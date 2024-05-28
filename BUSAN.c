@@ -278,7 +278,7 @@ int main() {
             else
                 printf("잘못된 입력입니다.\n");
         }
-        //zomnie attacked
+        //zomnie attacked, zombie won, madongseok dead
         if (C == Z - 1 && M != Z + 1) {
             printf("GAME OVER! citizen dead...\n");
             break;
@@ -286,8 +286,10 @@ int main() {
         else if (C != Z - 1 && M == Z + 1) {
             STM--;
             printf("zombie attacked madongseok. madongseok stamina: %d -> %d\n", STM + 1, STM);
-            if (STM == STM_MIN)
+            if (STM == STM_MIN) {
+                printf("madongseok dead...\n");
                 break;
+            }
         }
         else if (C == Z - 1 && M == Z + 1) {
             if (Caggro > Maggro) {
@@ -297,8 +299,10 @@ int main() {
             }
             if (Caggro <= Maggro) {
                 printf("zombie attacked madongseok (aggro: %d vs %d, madongseok stamina: %d -> %d)\n", Caggro, Maggro, STM - 1, STM);
-                if (STM == STM_MIN)
+                if (STM == STM_MIN) {
+                    printf("madongseok dead...\n");
                     break;
+                }
             }
         }
 
@@ -307,11 +311,6 @@ int main() {
             printf("\n");
             printf("SUCCESS!\n");
             printf("citizen(s) escaped to the next train\n");
-            break;
-        }
-        //madongseok dead
-        if (STM == STM_MIN) {
-            printf("madongseok dead...\n");
             break;
         }
     }
