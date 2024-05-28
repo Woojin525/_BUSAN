@@ -176,6 +176,89 @@ int main() {
             if (Maggro != AGGRO_MIN)
                 Maggro--;
 
+        //페이즈 2
+        //기차
+        for (int i = 0; i < LEN; i++)
+            printf("#");
+        printf("\n#");
+        for (int i = 0; i < C - 1; i++)
+            printf(" ");
+        printf("C");
+        for (int i = C; i < Z - 1; i++)
+            printf(" ");
+        printf("Z");
+        for (int i = Z; i < M - 1; i++)
+            printf(" ");
+        printf("M");
+        for (int i = 0; i <= LEN - M - 3; i++)
+            printf(" ");
+        printf("#\n");
+        for (int i = 0; i < LEN; i++)
+            printf("#");
+        printf("\n\n");
+
+        //페이즈 2 M상태
+        if (MDS == MOVE_LEFT)
+            printf("\n\nmadongseok:  %d -> %d(aggro: %d -> %d, stamina: %d)\n\n", M + 1, M, Maggro - 1, Maggro, STM);
+        if (MDS == MOVE_STAY)
+            printf("\n\nmadongseok: stay %d(aggro: %d -> %d, stamina: %d)\n\n", M, Maggro + 1, Maggro, STM);
+
+        //C
+        if (C != Z - 1)
+            printf("citizen does nothing.\n");
+        //Z
+        if (Z != C + 1 || Z != M - 1)
+            printf("zonbie attacked nobody.\n");
+        //M action
+        while (1) {
+            z = 0;
+            if (M == Z + 1)
+                printf("madongseok action(0.rest, 1.provoke, 2.pull)>> ");
+            else
+                printf("madongseok action(0.rest, 1.provoke)>> ");
+            scanf_s("%d", &action);
+            if (action == ACTION_REST) {
+                if (Maggro != AGGRO_MIN)
+                    Maggro--;
+                if (STM != STM_MAX)
+                    STM++;
+                printf("madongseok rests...\n\n");
+                if (Maggro != AGGRO_MIN && STM != STM_MAX)
+                    printf("madongseok: %d (aggro: %d -> %d, stamina: %d -> %d)\n", M, Maggro + 1, Maggro, STM - 1, STM);
+                else if (Maggro == AGGRO_MIN && STM != STM_MAX)
+                    printf("madongseok: %d (aggro: %d -> %d, stamina: %d -> %d)\n", M, Maggro, Maggro, STM - 1, STM);
+                else if (Maggro != AGGRO_MIN && STM == STM_MAX)
+                    printf("madongseok: %d (aggro: %d -> %d, stamina: %d -> %d)\n", M, Maggro + 1, Maggro, STM, STM);
+                else if (Maggro == AGGRO_MIN && STM == STM_MAX)
+                    printf("madongseok: %d (aggro: %d -> %d, stamina: %d -> %d)\n", M, Maggro, Maggro, STM, STM);
+                break;
+            }
+            else if (action == ACTION_PROVOKE) {
+                int maggro = Maggro;
+                Maggro = AGGRO_MAX;
+                printf("madongseok provoked zombie...\n\n");
+                printf("madongesok: %d, (aggro: %d -> %d, stamina: %d)\n", M, maggro, Maggro, STM);
+                break;
+            }
+            else if (action == ACTION_PULL) {
+                if (PROB < r2) {
+                    if (Maggro + 1 != AGGRO_MAX || Maggro != AGGRO_MAX)
+                        Maggro += 2;
+                    STM--;
+                    z = stun;
+                    printf("madongseok pulled zombie... Next turn, it can't move\n\n");
+                    break;
+                }
+                else {
+                    z = 0;
+                    printf("madongseok failed to pull zombie.\n\n");
+                    break;
+                }
+            }
+            else
+                printf("잘못된 입력입니다.\n");
+        }
+
         //Citizen won
         if (C == 1) {
             //기차
