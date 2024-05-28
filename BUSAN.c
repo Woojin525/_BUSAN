@@ -1,3 +1,5 @@
+//2-4<행동> : 예외처리 완료
+//bonus 전까지 완료
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
