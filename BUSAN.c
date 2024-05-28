@@ -115,10 +115,15 @@ int main() {
             C--;
 
         //Z상태
-        if (PROB > r2 && Zturn)
-            Z--;
-        printf("\n");
-
+        if (Zturn) {
+            if (Caggro >= Maggro && C + 1 != Z && z != stun)
+                Z--;
+            else if (Caggro < Maggro && M - 1 != Z && z != stun)
+                Z++;
+            else if (z == stun) {
+                printf("madongseok pulled zombie. ");
+            }
+        }
         //기차
         for (int i = 0; i < LEN; i++)
             printf("#");
@@ -259,57 +264,40 @@ int main() {
                 printf("잘못된 입력입니다.\n");
         }
 
+        //zomnie attacked
+        if (C == Z - 1 && M != Z + 1) {
+            printf("GAME OVER! citizen dead...\n");
+            break;
+        }
+        else if (C != Z - 1 && M == Z + 1) {
+            STM--;
+            printf("zombie attacked madongseok. madongseok stamina: %d -> %d\n", STM + 1, STM);
+            if (STM == STM_MIN)
+                break;
+        }
+        else if (C == Z - 1 && M == Z + 1) {
+            if (Caggro > Maggro) {
+                printf("zombie attacked Citizen (aggro: %d vs %d)\n", Caggro, Maggro);
+                printf("GAME OVER! citizen dead\n");
+                break;
+            }
+            if (Caggro <= Maggro) {
+                printf("zombie attacked madongseok (aggro: %d vs %d, madongseok stamina: %d -> %d)\n", Caggro, Maggro, STM - 1, STM);
+                if (STM == STM_MIN)
+                    break;
+            }
+        }
+
         //Citizen won
         if (C == 1) {
-            //기차
-            for (int i = 0; i < LEN; i++)
-                printf("#");
-            printf("\n#");
-            for (int i = 0; i < C - 1; i++)
-                printf(" ");
-            printf("C");
-            for (int i = C; i < Z - 1; i++)
-                printf(" ");
-            printf("Z");
-            for (int i = Z; i < M - 1; i++)
-                printf(" ");
-            printf("M");
-            for (int i = 0; i <= LEN - M - 3; i++)
-                printf(" ");
-            printf("#\n");
-            for (int i = 0; i < LEN; i++)
-                printf("#");
-
-
             printf("\n");
             printf("SUCCESS!\n");
             printf("citizen(s) escaped to the next train\n");
             break;
         }
-        //Zombie won
-        if (C + 1 == Z) {
-            //기차
-            for (int i = 0; i < LEN; i++)
-                printf("#");
-            printf("\n#");
-            for (int i = 0; i < C - 1; i++)
-                printf(" ");
-            printf("C");
-            for (int i = C; i < Z - 1; i++)
-                printf(" ");
-            printf("Z");
-            for (int i = Z; i < M - 1; i++)
-                printf(" ");
-            printf("M");
-            for (int i = 0; i <= LEN - M - 3; i++)
-                printf(" ");
-            printf("#\n");
-            for (int i = 0; i < LEN; i++)
-                printf("#");
-            printf("\n");
-            printf("GAME OVER!\n");
-            printf("Citizen(s) has(have) been attacked by a zombie\n");
-
+        //madongseok dead
+        if (STM == STM_MIN) {
+            printf("madongseok dead...\n");
             break;
         }
     }
