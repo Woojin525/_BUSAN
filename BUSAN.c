@@ -99,21 +99,16 @@ int main() {
 
     while (1) {
         //난수
+        int temp;
         for (int i = 0; i < 30; i++)
-            int temp = rand();
-
+            temp = rand();
         int r1 = rand() % 101;
         int r2 = rand() % 101;
-        printf("\n");
 
-
-        //Zturn 홀수번째
-        Zturn = !Zturn;
-
+        //페이즈 1
         //C상태
         if (PROB < r1)
             C--;
-
         //Z상태
         if (Zturn) {
             if (Caggro >= Maggro && C + 1 != Z && z != stun)
@@ -124,6 +119,7 @@ int main() {
                 printf("madongseok pulled zombie. ");
             }
         }
+        printf("\n");
         //기차
         for (int i = 0; i < LEN; i++)
             printf("#");
@@ -145,23 +141,40 @@ int main() {
         printf("\n\n");
 
         //C상태
-        if (PROB < r1)
-            printf("citizen: %d -> %d\n", C + 1, C);
-        else
-            printf("citizen: stay %d\n", C);
+        if (PROB < r1) {
+            if (Caggro != AGGRO_MAX) {
+                Caggro++;
+            }
+            printf("citizen: %d -> %d (aggro: %d -> %d)\n", C + 1, C, Caggro - 1, Caggro);
+        }
+
+        else {
+            if (Caggro != AGGRO_MIN)
+                Caggro--;
+            printf("citizen: stay %d (aggro: %d -> %d)\n", C, Caggro + 1, Caggro);
+        }
 
         //Z상태
-        if (PROB > r2 && Zturn)
-            printf("zombie: %d -> %d", Z + 1, Z);
-        else
-            printf("zombie: stay %d", Z);
+        if (Zturn)
+            if (z == stun)
+                printf("Zombie: stay (zombie stun)\n\n");
+            else if (Caggro <= Maggro && M - 1 != Z && z != stun)
+                printf("zombie: %d -> %d\n", Z - 1, Z);
+            else if (Caggro > Maggro && C + 1 != Z && z != stun)
+                printf("zombie: %d -> %d\n", Z + 1, Z);
+            else if (Caggro <= Maggro && M - 1 == Z && z != stun)
+                printf("zombie: stay (Caggro < Maggro)\n");
+            else if (Caggro > Maggro && M - 1 == Z && C + 1 == Z && z != stun)
+                printf("Zombie attaked Citizen\n");
 
         //Z쿨타임
         if (!Zturn)
-            printf(" (cannot move)\n");
+            printf("Zombie: stay (cannot move)\n");
         else
             printf("\n");
         printf("\n---------------\n\n");
+        //Zturn 홀수번째
+        Zturn = !Zturn;
 
         //M입력
         while (1) {
@@ -263,7 +276,6 @@ int main() {
             else
                 printf("잘못된 입력입니다.\n");
         }
-
         //zomnie attacked
         if (C == Z - 1 && M != Z + 1) {
             printf("GAME OVER! citizen dead...\n");
