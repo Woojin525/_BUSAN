@@ -42,14 +42,31 @@ int main() {
     printf("□□□□□□■□□□□□□□□■□□□□□□□□□□□□□■■□□□□■■□□\n");
     printf("□□□□□□■□□□□□□□□■■■■■■■■□□□□□□□■■■■■■□□□\n");
 
+    //변수들
+    int LEN, PROB, STM, MDS; // 길이, 확률, 스테미너, 마동석
+    int Caggro = 1, Maggro = 1; // 시민 어그로, 마동석 어그로
+    int action, stun = 999; // 스턴
+    int z = 0;
 
-    int LEN, PROB; //기차 길이, 설정
-
-
-    printf("train length(15~50) >> ");
-    scanf_s("%d", &LEN);
-    printf("percentile 'p' (10~90) >> ");
-    scanf_s("%d", &PROB);
+    //입력값 처리
+    while (1) {
+        printf("train length(15~50)>> ");
+        scanf_s("%d", &LEN);
+        if (LEN <= LEN_MAX && LEN >= LEN_MIN)
+            break;
+    }
+    while (1) {
+        printf("madongseok stamina(0~5)>> ");
+        scanf_s("%d", &STM);
+        if (STM <= STM_MAX && STM >= STM_MIN)
+            break;
+    }
+    while (1) {
+        printf("percentile probability 'p'(10~90)>> ");
+        scanf_s("%d", &PROB);
+        if (PROB <= PROB_MAX && PROB >= PROB_MIN)
+            break;
+    }
 
     int Z = LEN - 3, C = LEN - 6, M = LEN - 2; //좀비, 시민, 마동석
     int Zturn = 1;
